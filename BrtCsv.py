@@ -22,17 +22,17 @@ class BrtCsv():
             print('File %s not found' % file)
         return caps
 
-    def get_group_caps(self, group):
+    def get_method_caps(self, method):
         caps = []
-        if group['caps_type'] == config.caps_type['ALL']:
+        if method['caps_type'] == config.caps_type['ALL']:
             caps = ['*']
-        elif group['caps_type'] == config.caps_type['ARRAY']:
-            caps = group['caps_array']
-        elif group['caps_type'] == config.caps_type['FILE']:
-            caps = BrtCsv.get_caps_from_file(group['caps_file'])
+        elif method['caps_type'] == config.caps_type['ARRAY']:
+            caps = method['caps_array']
+        elif method['caps_type'] == config.caps_type['FILE']:
+            caps = BrtCsv.get_caps_from_file(method['caps_file'])
         return caps
 
-    def build_group_rows(self, method, rates, caps, extra=0):
+    def build_method_rows(self, method, rates, caps, extra=0):
         for rate in rates:
             for cap in caps:
                 self.csv_rows.append({
@@ -49,9 +49,9 @@ class BrtCsv():
                 self.tot_rows = self.tot_rows + 1
 
     def build_rows(self):
-        for group in config.groups:
-            caps = self.get_group_caps(group)
-            self.build_group_rows(group['Method'], group['rates'], caps)
+        for method in config.methods:
+            caps = self.get_method_caps(method)
+            self.build_method_rows(method['Method'], method['rates'], caps)
 
     def build_csv(self):
         tot = 0
