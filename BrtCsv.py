@@ -57,7 +57,7 @@ class BrtCsv():
         tot = 0
         print('Writing CSV...')
         with open(config.csv_file, 'w') as fh:
-            writer = csv.DictWriter(fh, fieldnames=config.csv_fields, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+            writer = csv.DictWriter(fh, fieldnames=config.csv_fields, delimiter=',', quoting=csv.QUOTE_ALL)
             writer.writeheader()
             for row in self.csv_rows:
                 writer.writerow(row)

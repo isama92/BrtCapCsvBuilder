@@ -102,7 +102,7 @@ methods = [
     },
     {
         # disadvantaged
-        'Method': 'Disagiate e Is. Minori',
+        'Method': 'Disagiate e Isole Minori',
         'caps_type': caps_type['FILE'],
         'caps_file': 'disadvantaged.txt',
         'rates': rates['disadvantaged'],
