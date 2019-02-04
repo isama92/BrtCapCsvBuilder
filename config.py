@@ -114,6 +114,7 @@ methods = [
         'Method': 'Disagiate e Isole Minori',
         'destinations_type': destinations_type['FILE'],
         'destinations_file': 'disadvantaged.txt',
+        'regex': r'(?=\d).*?(?=\()',
         'rates': rates['disadvantaged'],
     },
     {

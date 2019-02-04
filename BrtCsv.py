@@ -10,12 +10,12 @@ class BrtCsv():
         self.csv_rows = []
 
     @staticmethod
-    def get_destinations_from_file(file):
+    def get_destinations_from_file(file, regex):
         destinations = []
         if isfile(file):
             with open(file, 'r') as fh:
                 content = fh.read()
-            destinations = re.findall(r'(?=\d).*?(?=\()', content)
+            destinations = re.findall(regex, content)
             for i in range(0, len(destinations)):
                 d = destinations[i].replace('*', ' ')
                 d = d.split(' ', 1)
@@ -38,7 +38,7 @@ class BrtCsv():
         elif method['destinations_type'] == config.destinations_type['ARRAY']:
             destinations = method['destinations_array']
         elif method['destinations_type'] == config.destinations_type['FILE']:
-            destinations = BrtCsv.get_destinations_from_file(method['destinations_file'])
+            destinations = BrtCsv.get_destinations_from_file(method['destinations_file'], method['regex'])
         return destinations
 
     def build_method_rows(self, method, rates, destinations, extra=0):
