@@ -1,4 +1,4 @@
-from settings import caps_type
+from settings import destinations_type
 
 # this will be the output file
 csv_file = 'result.csv'
@@ -90,33 +90,42 @@ methods = [
     {
         # free zone
         'Method': 'Standard',
-        'caps_type': caps_type['ARRAY'],
-        'caps_array': [23041, 22061],
+        'destinations_type': destinations_type['ARRAY'],
+        'destinations_array': [
+            {
+                'cap': '22061',
+                'city': 'CAMPIONE D\'ITALIA',
+            },
+            {
+                'cap': '23041',
+                'city': 'LIVIGNO',
+            }
+        ],
         'rates': rates['free_zone'],
     },
     {
         # standard
         'Method': 'Standard',
-        'caps_type': caps_type['ALL'],
+        'destinations_type': destinations_type['ALL'],
         'rates': rates['standard'],
     },
     {
         # disadvantaged
         'Method': 'Disagiate e Isole Minori',
-        'caps_type': caps_type['FILE'],
-        'caps_file': 'disadvantaged.txt',
+        'destinations_type': destinations_type['FILE'],
+        'destinations_file': 'disadvantaged.txt',
         'rates': rates['disadvantaged'],
     },
     {
         # priority
         'Method': 'Priority',
-        'caps_type': caps_type['ALL'],
+        'destinations_type': destinations_type['ALL'],
         'rates': rates['priority'],
     },
-    {
-        # 10.30
-        'Method': 'Entro le 10.30',
-        'caps_type': caps_type['ALL'],
-        'rates': rates['ten'],
-    },
+    # {
+    #     # 10.30
+    #     'Method': 'Entro le 10.30',
+    #     'destinations_type': destinations_type['ALL'],
+    #     'rates': rates['ten'],
+    # },
 ]

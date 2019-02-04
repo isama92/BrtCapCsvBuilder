@@ -10,37 +10,46 @@ class BrtCsv():
         self.csv_rows = []
 
     @staticmethod
-    def get_caps_from_file(file):
-        caps = []
+    def get_destinations_from_file(file):
+        destinations = []
         if isfile(file):
             with open(file, 'r') as fh:
                 content = fh.read()
-            caps = re.findall(r'(\d{5})', content)
-            caps = list(set(caps))
-            print('Caps from file %s: %d lines | %d caps (Note: there might be a lot of duplicates)' % (file, content.count('\n'), len(caps)))
+            destinations = re.findall(r'(?=\d).*?(?=\()', content)
+            for i in range(0, len(destinations)):
+                d = destinations[i].replace('*', ' ')
+                d = d.split(' ', 1)
+                destinations[i] = {
+                    'cap': d[0],
+                    'city': d[1],
+                }
+            print('Destination from file %s: %d lines | %d cities' % (file, content.count('\n'), len(destinations)))
         else:
             print('File %s not found' % file)
-        return caps
+        return destinations
 
-    def get_method_caps(self, method):
-        caps = []
-        if method['caps_type'] == config.caps_type['ALL']:
-            caps = ['*']
-        elif method['caps_type'] == config.caps_type['ARRAY']:
-            caps = method['caps_array']
-        elif method['caps_type'] == config.caps_type['FILE']:
-            caps = BrtCsv.get_caps_from_file(method['caps_file'])
-        return caps
+    def get_method_destinations(self, method):
+        destinations = []
+        if method['destinations_type'] == config.destinations_type['ALL']:
+            destinations = [{
+                'cap': '*',
+                'city': '*',
+            }]
+        elif method['destinations_type'] == config.destinations_type['ARRAY']:
+            destinations = method['destinations_array']
+        elif method['destinations_type'] == config.destinations_type['FILE']:
+            destinations = BrtCsv.get_destinations_from_file(method['destinations_file'])
+        return destinations
 
-    def build_method_rows(self, method, rates, caps, extra=0):
+    def build_method_rows(self, method, rates, destinations, extra=0):
         for rate in rates:
-            for cap in caps:
+            for destination in destinations:
                 self.csv_rows.append({
                     'Country': 'ITA',
                     'Region/State': '*',
-                    'City': '*',
-                    'Zip/Postal Code From': cap,
-                    'Zip/Postal Code To': cap,
+                    'City': destination['city'],
+                    'Zip/Postal Code From': destination['cap'],
+                    'Zip/Postal Code To': destination['cap'],
                     'Weight>': rate['weight_min'],
                     'Weight<=': rate['weight_max'],
                     'Shipping Price': rate['price'] + extra,
@@ -50,8 +59,8 @@ class BrtCsv():
 
     def build_rows(self):
         for method in config.methods:
-            caps = self.get_method_caps(method)
-            self.build_method_rows(method['Method'], method['rates'], caps)
+            destinations = self.get_method_destinations(method)
+            self.build_method_rows(method['Method'], method['rates'], destinations)
 
     def build_csv(self):
         tot = 0
